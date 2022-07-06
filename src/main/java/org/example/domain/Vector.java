@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.example.exception.PositionChangeException;
 
 @Getter
+@Setter
 public class Vector {
     private Integer x;
     private Integer y;

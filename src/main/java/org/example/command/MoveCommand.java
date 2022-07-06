@@ -1,14 +1,16 @@
-package org.example.domain;
+package org.example.command;
 
+import org.example.space_interface.Command;
 import org.example.space_interface.Movable;
 
-public class Move {
+public class MoveCommand implements Command {
     private final Movable movable;
 
-    public Move(Movable movable) {
+    public MoveCommand(Movable movable) {
         this.movable = movable;
     }
 
+    @Override
     public void execute() {
         movable.getPosition().plus(movable.getVelocity());
     }
