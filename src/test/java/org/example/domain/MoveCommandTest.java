@@ -1,21 +1,20 @@
 package org.example.domain;
 
+import org.example.command.MoveCommand;
 import org.example.exception.*;
 import org.example.space_interface.Movable;
-import org.example.space_interface.Rotable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.assertj.core.api.Assertions.*;
 
 
 @ExtendWith(MockitoExtension.class)
-class MoveTest {
+class MoveCommandTest {
     private static final Vector START_POSITION = new Vector(12, 5);
     private static final Vector END_POSITION = new Vector(5, 8);
     private static final Vector VELOCITY = new Vector(-7,3);
@@ -38,20 +37,20 @@ class MoveTest {
     private Movable movable;
 
     @InjectMocks
-    private Move move;
+    private MoveCommand moveCommand;
 
     @Test
     void shouldThrowPositionException() {
         given(movable.getPosition()).willThrow(PositionException.class);
 
-        assertThatThrownBy(() -> move.execute()).isInstanceOf(PositionException.class);
+        assertThatThrownBy(() -> moveCommand.execute()).isInstanceOf(PositionException.class);
     }
 
     @Test
     void shouldThrowVelocityException() {
         given(movable.getVelocity()).willThrow(VelocityException.class);
 
-        assertThatThrownBy(() -> move.execute()).isInstanceOf(VelocityException.class);
+        assertThatThrownBy(() -> moveCommand.execute()).isInstanceOf(VelocityException.class);
     }
 
     @Test
@@ -59,7 +58,7 @@ class MoveTest {
         given(movable.getVelocity()).willReturn(VELOCITY_OVERFLOW_MAX_1);
         given(movable.getPosition()).willReturn(POSITION_OVERFLOW_MAX);
 
-        assertThatThrownBy(() -> move.execute()).isInstanceOf(PositionChangeException.class);
+        assertThatThrownBy(() -> moveCommand.execute()).isInstanceOf(PositionChangeException.class);
     }
 
     @Test
@@ -67,7 +66,7 @@ class MoveTest {
         given(movable.getVelocity()).willReturn(VELOCITY_OVERFLOW_MAX_2);
         given(movable.getPosition()).willReturn(POSITION_OVERFLOW_MAX);
 
-        assertThatThrownBy(() -> move.execute()).isInstanceOf(PositionChangeException.class);
+        assertThatThrownBy(() -> moveCommand.execute()).isInstanceOf(PositionChangeException.class);
     }
 
     @Test
@@ -75,7 +74,7 @@ class MoveTest {
         given(movable.getVelocity()).willReturn(VELOCITY_OVERFLOW_MIN_1);
         given(movable.getPosition()).willReturn(POSITION_OVERFLOW_MIN);
 
-        assertThatThrownBy(() -> move.execute()).isInstanceOf(PositionChangeException.class);
+        assertThatThrownBy(() -> moveCommand.execute()).isInstanceOf(PositionChangeException.class);
     }
 
     @Test
@@ -83,7 +82,7 @@ class MoveTest {
         given(movable.getVelocity()).willReturn(VELOCITY_OVERFLOW_MIN_2);
         given(movable.getPosition()).willReturn(POSITION_OVERFLOW_MIN);
 
-        assertThatThrownBy(() -> move.execute()).isInstanceOf(PositionChangeException.class);
+        assertThatThrownBy(() -> moveCommand.execute()).isInstanceOf(PositionChangeException.class);
     }
 
     @Test
@@ -91,7 +90,7 @@ class MoveTest {
         given(movable.getVelocity()).willReturn(VELOCITY);
         given(movable.getPosition()).willReturn(START_POSITION);
 
-        move.execute();
+        moveCommand.execute();
 
         assertThat(movable.getPosition().getX()).isEqualTo(END_POSITION.getX());
         assertThat(movable.getPosition().getY()).isEqualTo(END_POSITION.getY());

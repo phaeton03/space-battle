@@ -1,5 +1,6 @@
 package org.example.domain;
 
+import org.example.command.RotateCommand;
 import org.example.exception.AngularVelocityException;
 import org.example.exception.DirectionException;
 import org.example.space_interface.Rotable;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class RotateTest {
+public class RotateCommandTest {
     private final static Integer DIRECTION_NUMBER = 8;
     private static final Direction START_DIRECTION = new Direction(4, DIRECTION_NUMBER);
 
@@ -27,20 +28,20 @@ public class RotateTest {
     private Rotable rotable;
 
     @InjectMocks
-    private Rotate rotate;
+    private RotateCommand rotateCommand;
 
     @Test
     void shouldThrowAngularVelocityException() {
         given(rotable.getAngularVelocity()).willThrow(AngularVelocityException.class);
 
-        assertThatThrownBy(() -> rotate.execute()).isInstanceOf(AngularVelocityException.class);
+        assertThatThrownBy(() -> rotateCommand.execute()).isInstanceOf(AngularVelocityException.class);
     }
 
     @Test
     void shouldThrowDirectionException() {
         given(rotable.getDirection()).willThrow(DirectionException.class);
 
-        assertThatThrownBy(() -> rotate.execute()).isInstanceOf(DirectionException.class);
+        assertThatThrownBy(() -> rotateCommand.execute()).isInstanceOf(DirectionException.class);
     }
 
     @Test
@@ -48,7 +49,7 @@ public class RotateTest {
         given(rotable.getDirection()).willReturn(START_DIRECTION);
         given(rotable.getAngularVelocity()).willReturn(ANGULAR_VELOCITY);
 
-        rotate.execute();
+        rotateCommand.execute();
 
         assertThat(rotable.getDirection().getDirection()).isEqualTo(END_DIRECTION.getDirection());
     }
