@@ -11,6 +11,6 @@ public class DoubleRepeaterExceptionCommand implements Command {
 
     @Override
     public void execute() {
-
+        command.execute();
     }
 }
