@@ -4,6 +4,7 @@ import org.example.domain.Burn;
 import org.example.domain.Fuel;
 import org.example.domain.Vector;
 import org.example.exception.FuelException;
+import org.example.exception.handler.GlobalExceptionHandler;
 import org.example.space_interface.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ class MacroMoveCommandTest {
 
     @Mock
     private MoveCommand moveCommand;
+
 
     private final List<Command> commandList = new ArrayList<>();
 

@@ -1,8 +1,10 @@
 package org.example.command;
 
+import org.example.exception.handler.GlobalExceptionHandler;
 import org.example.space_interface.Command;
 
 import java.util.List;
+import java.util.Queue;
 
 public class MacroCommand implements Command {
     private final List<Command> commandList;

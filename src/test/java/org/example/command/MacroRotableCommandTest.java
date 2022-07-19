@@ -1,6 +1,7 @@
 package org.example.command;
 
 import org.example.exception.FuelException;
+import org.example.exception.handler.GlobalExceptionHandler;
 import org.example.space_interface.Command;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
