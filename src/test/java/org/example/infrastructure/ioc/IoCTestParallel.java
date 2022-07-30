@@ -1,6 +1,7 @@
 package org.example.infrastructure.ioc;
 
 import org.example.domain.Vector;
+import org.example.space_interface.Command;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,25 +21,22 @@ import static org.mockito.BDDMockito.*;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-//@Execution(ExecutionMode.CONCURRENT)
+@Execution(ExecutionMode.CONCURRENT)
 public class IoCTestParallel {
 
     private final Vector PLUS_VECTOR = new Vector(10, 10);
     private final Vector NEGATE_VECTOR = new Vector(-10, -10);
 
     @BeforeEach
-    public void init() {
-//        IoC.RegisterCommand registerCommand = IoC.resolve("IoC.Register", "InitialPosition",
-//                Vector.class, 0, 0);
+    public void setScope() {
+        Scope newScope = IoC.resolve("Scope.New", (Scope) IoC.resolve("Scope.RootScope"));
+        ((Command) IoC.resolve("Scope.Current", newScope)).execute();
     }
 
     @Test
     public void shouldPlusVector() {
-
-        IoC.RegisterCommand registerCommand = IoC.resolve("IoC.Register", "InitialPosition",
-                Vector.class, 0, 0);
-
-        registerCommand.execute();
+        ((Command) IoC.resolve("IoC.Register", "InitialPosition",
+                Vector.class, 0, 0)).execute();
 
         Vector initialPosition = IoC.resolve("InitialPosition");
 
@@ -50,14 +48,10 @@ public class IoCTestParallel {
 
     @Test
     public void shouldNegateVector() {
-        IoC.RegisterCommand registerCommand = IoC.resolve("IoC.Register", "InitialPosition",
-                Vector.class, 10, 10);
-
-        registerCommand.execute();
+        ((Command) IoC.resolve("IoC.Register", "InitialPosition",
+                Vector.class, 10, 10)).execute();
 
         Vector initialPosition = IoC.resolve("InitialPosition", 10, 10);
-
-        System.out.println(initialPosition.getX());
 
         initialPosition.plus(NEGATE_VECTOR);
 

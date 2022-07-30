@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 public class BasicScope implements Scope {
     private final HashMap<String, Function<Object[], Object>> holder = new HashMap<>();
+    private final HashMap<String, Object[]> registerArguments = new HashMap<>();
     private final Scope parentScope;
 
     public BasicScope(Scope parentScope) {
@@ -17,7 +18,7 @@ public class BasicScope implements Scope {
     @Override
     public Function<Object[], Object> get(String key) {
 
-        return Optional.ofNullable(holder.get(key)).orElse(parentScope.get(key));
+        return Optional.ofNullable(holder.get(key)).orElseGet(() -> parentScope.get(key));
     }
 
     @Override
@@ -27,11 +28,11 @@ public class BasicScope implements Scope {
 
     @Override
     public void putArguments(String key, Object[] args) {
-
+        registerArguments.put(key, args);
     }
 
     @Override
     public Optional<Object[]> getArguments(String key) {
-        return Optional.empty();
+        return Optional.ofNullable(registerArguments.get(key));
     }
 }

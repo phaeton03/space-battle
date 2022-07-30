@@ -16,7 +16,8 @@ public class IoC {
     private static final ThreadLocal<Scope> scopes = new ThreadLocal<>();
 
     static {
-        RootScope rootScope = new RootScope();
+        Scope rootScope = new RootScope();
+        rootScope.put("Scope.RootScope", (args) -> rootScope);
         rootScope.put("IoC.Register", (args) -> new IoC.RegisterCommand(args));
         rootScope.put("Scope.New", (args) -> new BasicScope((Scope) args[0]));
         rootScope.put("Scope.Current", (args) -> new SetCurrentScopeCommand((Scope) args[0]));
