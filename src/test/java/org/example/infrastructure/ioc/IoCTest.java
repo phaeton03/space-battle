@@ -8,6 +8,8 @@ import org.mockito.MockedStatic;
 import org.mockito.internal.MockedStaticImpl;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.function.Supplier;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.assertj.core.api.Assertions.*;
@@ -27,6 +29,7 @@ class IoCTest {
     public void shouldRegisterInitialPosition() {
         IoC.RegisterCommand registerCommand = IoC.resolve("IoC.Register", "InitialPosition",
                 Vector.class, 0, 0);
+
 
         registerCommand.execute();
 

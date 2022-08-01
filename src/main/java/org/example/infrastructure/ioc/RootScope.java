@@ -12,6 +12,7 @@ public class RootScope implements Scope {
 
     @Override
     public Function<Object[], Object> get(String key) {
+        System.out.println(key);
         return Optional.ofNullable(dependencies.get(key)).orElseThrow(NotFoundException::new);
     }
 
