@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public class Direction {
     private final Integer directionNumber;
+
     private Integer direction;
 
     public Direction(Integer direction, Integer directionNumber) {

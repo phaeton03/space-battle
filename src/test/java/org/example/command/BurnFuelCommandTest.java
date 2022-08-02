@@ -4,6 +4,7 @@ import org.example.domain.Burn;
 import org.example.domain.Fuel;
 import org.example.space_interface.Burnable;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
