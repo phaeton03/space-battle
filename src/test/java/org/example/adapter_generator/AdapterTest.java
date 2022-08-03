@@ -2,22 +2,28 @@ package org.example.adapter_generator;
 
 import org.example.adapter.AdapterGenerator;
 import org.example.adapter.DefaultInvocationHandler;
+import org.example.command.FinishMovableCommand;
 import org.example.command.SetPropertyCommand;
 import org.example.domain.Vector;
 import org.example.infrastructure.ioc.IoC;
 import org.example.space_interface.Command;
 import org.example.space_interface.Movable;
 import org.example.space_interface.UObject;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.BDDMockito.*;
 
@@ -32,8 +38,14 @@ public class AdapterTest {
 
     private final String PROPERTY_POSITION = "Position";
 
-    @BeforeEach
-    public void register() {
+    private final PrintStream STANDART_OUT = System.out;
+
+    private final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+    private final String FINISH_MESSAGE = "Command is finished";
+
+    @BeforeAll
+    public static void register() {
         ((Command) IoC.resolve("IoC.Register", "Adapter",
                 AdapterGenerator.class)).execute();
 
@@ -43,7 +55,11 @@ public class AdapterTest {
 
         ((Command) IoC.resolve("IoC.Register",
                 "SetProperty", SetPropertyCommand.class)).execute();
+
+        ((Command) IoC.resolve("IoC.Register",
+                "Movable.finish", FinishMovableCommand.class)).execute();
     }
+
 
     @Test
     public void shouldGetPositionWithAdapter() {
@@ -59,8 +75,6 @@ public class AdapterTest {
 
     @Test
     public void shouldSetPositionWithAdapter() {
-        given(uObject.getProperty("position")).willReturn(POSITION);
-        
         AdapterGenerator adapterGenerator =
                 IoC.resolve("Adapter", Movable.class, new DefaultInvocationHandler(Movable.class, uObject));
 
@@ -68,9 +82,24 @@ public class AdapterTest {
 
         movableAdapter.setPosition(NEW_POSITION);
 
-        Vector position = movableAdapter.getPosition();
-
-
         verify(uObject, times(1)).setProperty(PROPERTY_POSITION, NEW_POSITION);
+    }
+
+    @Test
+    public void shouldExecuteVoidMethodWithAdapter() {
+        AdapterGenerator adapterGenerator =
+                IoC.resolve("Adapter", Movable.class, new DefaultInvocationHandler(Movable.class, uObject));
+
+        Movable movableAdapter = (Movable) adapterGenerator.execute();
+
+        System.setOut(new PrintStream(outputStream));
+
+        movableAdapter.finish();
+
+        String[] messages = outputStream.toString().trim().split("\n");
+
+        assertEquals(FINISH_MESSAGE, messages[messages.length - 1]);
+
+        System.setOut(STANDART_OUT);
     }
 }
