@@ -7,8 +7,8 @@ import org.example.space_interface.Command;
 public class GameCommand implements Command {
     private final ThreadStrategy threadStrategy;
 
-    public GameCommand() {
-        this.threadStrategy = IoC.resolve("ThreadStrategy");
+    public GameCommand(ThreadStrategy threadStrategy) {
+        this.threadStrategy = threadStrategy;
     }
 
     @Override

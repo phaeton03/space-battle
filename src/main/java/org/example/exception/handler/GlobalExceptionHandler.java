@@ -18,16 +18,14 @@ import java.util.Queue;
 public class GlobalExceptionHandler implements HandlerExceptionResolver {
     private final Queue<Command> commandQueue;
 
-
-
     private final Map<Class<? extends Exception>, Class<? extends Command>> exceptionCommandHandlerMap
             = ExceptionHandlerConfig.exceptionCommandHandlerMap;
 
     private final Map<Class<? extends Command>, Class<? extends Command>> commandHandlerMap
             = ExceptionHandlerConfig.commandHandlerMap;
 
-    public GlobalExceptionHandler() {
-        this.commandQueue = IoC.resolve("CommandQueue");
+    public GlobalExceptionHandler(Queue<Command> commandQueue) {
+        this.commandQueue = commandQueue;
     }
 
     public void handle(Command command, Exception e) {

@@ -3,7 +3,7 @@ package org.example.infrastructure.ioc;
 import java.util.Optional;
 import java.util.function.Function;
 
-public interface Scope {
+public interface ScopePrototype {
     Function<Object[], Object> get(String key);
 
     void put(String key, Function<Object[], Object> factory);
