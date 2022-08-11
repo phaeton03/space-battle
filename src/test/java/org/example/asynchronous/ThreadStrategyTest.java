@@ -6,10 +6,13 @@ import org.example.exception.handler.GlobalExceptionHandler;
 import org.example.infrastructure.ioc.IoC;
 import org.example.space_interface.Command;
 import org.example.strategy.DefaultThreadHandlerStrategy;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -39,18 +42,27 @@ public class ThreadStrategyTest {
         ((Command) IoC.resolve("IoC.Register", "HandlerStrategy",
                 DefaultThreadHandlerStrategy.class, "CommandQueue", "HandlerExceptionResolver")).execute();
 
-        ((Command) IoC.resolve("IoC.RegisterSingleton", "ThreadStrategy",
-                ThreadStrategy.class, "CommandQueue", "HandlerExceptionResolver", "HandlerStrategy")).execute();
-
         ((Command) IoC.resolve("IoC.Register", "GameCommand",
                 GameCommand.class, "ThreadStrategy")).execute();
+    }
+
+    @AfterEach
+    public void clear() {
+        ((Queue<Command>) IoC.resolve("CommandQueue")).clear();
+    }
+
+    @BeforeEach
+    public void init() {
+        ((Command) IoC.resolve("IoC.RegisterSingleton", "ThreadStrategy",
+                ThreadStrategy.class, "CommandQueue", "HandlerExceptionResolver", "HandlerStrategy")).execute();
     }
 
     @Test
     public void shouldSoftStop() {
         Queue<Command> commandQueue = IoC.resolve("CommandQueue");
+
         commandQueue.add(command);
-        commandQueue.add(((ThreadStrategy)IoC.resolve("ThreadStrategy")).new SoftStopCommand());
+        commandQueue.add(((ThreadStrategy) IoC.resolve("ThreadStrategy")).new SoftStopCommand());
         commandQueue.add(command);
         commandQueue.add(command);
 

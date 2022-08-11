@@ -27,6 +27,8 @@ public class ThreadStrategy implements Runnable {
         while (!stop) {
             handlerStrategy.handle();
         }
+
+        stop = false;
     }
 
     public class HardStopCommand implements Command {
