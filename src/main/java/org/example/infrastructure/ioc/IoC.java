@@ -19,6 +19,8 @@ public class IoC {
         Scope rootScope = new RootScope();
         rootScope.put("Scope.RootScope", (args) -> rootScope);
         rootScope.put("IoC.Register", (args) -> new IoC.RegisterCommand(args));
+        rootScope.put("IoC.RegisterFunction", (args) ->
+                new IoC.RegisterFunctionCommand((String) args[0], (Function<Object[], Object>) args[1]));
         rootScope.put("Scope.New", (args) -> new BasicScope((Scope) args[0]));
         rootScope.put("Scope.Current", (args) -> new SetCurrentScopeCommand((Scope) args[0]));
         scopes.set(rootScope);
@@ -78,6 +80,23 @@ public class IoC {
             }
         }
 
+    }
+
+    public static class RegisterFunctionCommand implements Command {
+        private final Function<Object[], Object> func;
+        private final String dependency;
+
+        public RegisterFunctionCommand(String dependency, Function<Object[], Object> func) {
+            this.dependency = dependency;
+            this.func = func;
+        }
+
+        @Override
+        public void execute() {
+            final Scope currentScope = scopes.get();
+
+            currentScope.put(dependency, func);
+        }
     }
 
 
