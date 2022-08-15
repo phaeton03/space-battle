@@ -1,6 +1,7 @@
 package org.example.infrastructure.ioc;
 
 import org.example.domain.Vector;
+import org.example.space_interface.Command;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -27,9 +28,11 @@ class IoCTest {
 
     @Test
     public void shouldRegisterInitialPosition() {
+        ScopePrototype newScopePrototype = IoC.resolve("Scope.New", (ScopePrototype) IoC.resolve("Scope.RootScope"));
+        ((Command) IoC.resolve("Scope.Current", newScopePrototype)).execute();
+
         IoC.RegisterCommand registerCommand = IoC.resolve("IoC.Register", "InitialPosition",
                 Vector.class, 0, 0);
-
 
         registerCommand.execute();
 

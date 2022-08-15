@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class RootScope implements Scope {
+public class RootScopePrototype implements ScopePrototype {
     private final HashMap<String, Function<Object[], Object>> dependencies = new HashMap<>();
     private final HashMap<String, Object[]> registerArguments = new HashMap<>();
 

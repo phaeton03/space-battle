@@ -8,16 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.internal.MockedStaticImpl;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,8 +20,8 @@ public class IoCTestParallel {
 
     @BeforeEach
     public void setScope() {
-        Scope newScope = IoC.resolve("Scope.New", (Scope) IoC.resolve("Scope.RootScope"));
-        ((Command) IoC.resolve("Scope.Current", newScope)).execute();
+        ScopePrototype newScopePrototype = IoC.resolve("Scope.New", (ScopePrototype) IoC.resolve("Scope.RootScope"));
+        ((Command) IoC.resolve("Scope.Current", newScopePrototype)).execute();
     }
 
     @Test

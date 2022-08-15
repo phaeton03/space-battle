@@ -1,24 +1,22 @@
 package org.example.infrastructure.ioc;
 
-import org.example.exception.NotFoundException;
-
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class BasicScope implements Scope {
+public class BasicScopePrototype implements ScopePrototype {
     private final HashMap<String, Function<Object[], Object>> holder = new HashMap<>();
     private final HashMap<String, Object[]> registerArguments = new HashMap<>();
-    private final Scope parentScope;
+    private final ScopePrototype parentScopePrototype;
 
-    public BasicScope(Scope parentScope) {
-        this.parentScope = parentScope;
+    public BasicScopePrototype(ScopePrototype parentScopePrototype) {
+        this.parentScopePrototype = parentScopePrototype;
     }
 
     @Override
     public Function<Object[], Object> get(String key) {
 
-        return Optional.ofNullable(holder.get(key)).orElseGet(() -> parentScope.get(key));
+        return Optional.ofNullable(holder.get(key)).orElseGet(() -> parentScopePrototype.get(key));
     }
 
     @Override

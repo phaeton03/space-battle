@@ -1,7 +1,6 @@
 package org.example.adapter;
 
-import org.example.space_interface.UObject;
-import org.example.strategy.Generator;
+import org.example.generator.Generator;
 
 import java.lang.reflect.InvocationHandler;
 import java.util.HashMap;

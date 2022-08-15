@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.command.DefaultExceptionCommand;
 import org.example.command.MacroCommand;
 import org.example.config.ExceptionHandlerConfig;
+import org.example.infrastructure.ioc.IoC;
 import org.example.space_interface.Command;
 import org.example.space_interface.HandlerExceptionResolver;
 
@@ -13,9 +14,10 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-@NoArgsConstructor
+
 public class GlobalExceptionHandler implements HandlerExceptionResolver {
-    private Queue<Command> commandQueue = new LinkedList<>();
+    private final Queue<Command> commandQueue;
+
     private final Map<Class<? extends Exception>, Class<? extends Command>> exceptionCommandHandlerMap
             = ExceptionHandlerConfig.exceptionCommandHandlerMap;
 

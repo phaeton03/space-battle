@@ -3,14 +3,14 @@ package org.example.infrastructure.ioc;
 import org.example.space_interface.Command;
 
 public class SetScopeCommand implements Command {
-    private final Scope scope;
+    private final ScopePrototype scopePrototype;
 
-    public SetScopeCommand(Scope scope) {
-        this.scope = scope;
+    public SetScopeCommand(ScopePrototype scopePrototype) {
+        this.scopePrototype = scopePrototype;
     }
 
     @Override
     public void execute() {
-        ((Command) IoC.resolve("Scope.SetCurrent", scope)).execute();
+        ((Command) IoC.resolve("Scope.SetCurrent", scopePrototype)).execute();
     }
 }

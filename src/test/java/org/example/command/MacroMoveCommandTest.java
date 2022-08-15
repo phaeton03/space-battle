@@ -55,10 +55,6 @@ class MacroMoveCommandTest {
 
     @Test
     void shouldCallAllCommands() {
-        doNothing().when(checkFuelCommand).execute();
-        doNothing().when(burnFuelCommand).execute();
-        doNothing().when(moveCommand).execute();
-
         macroMoveCommand.execute();
 
         verify(checkFuelCommand, times(1)).execute();
