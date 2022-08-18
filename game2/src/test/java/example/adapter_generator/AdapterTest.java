@@ -6,6 +6,7 @@ import org.example.command.FinishMovableCommand;
 import org.example.command.SetPropertyCommand;
 import org.example.domain.Vector;
 import org.example.infrastructure.ioc.IoC;
+import org.example.infrastructure.ioc.Scope;
 import org.example.space_interface.Command;
 import org.example.space_interface.Movable;
 import org.example.space_interface.UObject;
@@ -42,6 +43,9 @@ public class AdapterTest {
 
     @BeforeAll
     public static void register() {
+        Scope newScope = IoC.resolve("Scope.New", (Scope) IoC.resolve("Scope.RootScope"));
+        ((Command) IoC.resolve("Scope.Current", newScope)).execute();
+
         ((Command) IoC.resolve("IoC.Register", "Adapter",
                 AdapterGenerator.class)).execute();
 

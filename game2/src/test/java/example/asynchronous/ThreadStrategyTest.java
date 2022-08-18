@@ -4,6 +4,7 @@ import org.example.asynchronous.ThreadStrategy;
 import org.example.command.GameCommand;
 import org.example.exception.handler.GlobalExceptionHandler;
 import org.example.infrastructure.ioc.IoC;
+import org.example.infrastructure.ioc.Scope;
 import org.example.space_interface.Command;
 import org.example.strategy.DefaultThreadHandlerStrategy;
 import org.junit.jupiter.api.AfterEach;
@@ -28,6 +29,9 @@ public class ThreadStrategyTest {
 
     @BeforeAll
     public static void register() {
+        Scope newScope = IoC.resolve("Scope.New", (Scope) IoC.resolve("Scope.RootScope"));
+        ((Command) IoC.resolve("Scope.Current", newScope)).execute();
+
         Queue<Command> commandQueue = new ConcurrentLinkedQueue<>();
 
         ((Command) IoC.resolve("IoC.RegisterFunction", "CommandQueue",

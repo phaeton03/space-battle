@@ -9,13 +9,14 @@ import java.util.function.Function;
 
 
 public class IoC {
-
     private static final ThreadLocal<Scope> scopesPrototype = new ThreadLocal<>();
+
     private static final ThreadLocal<ScopeSingleton> scopesSingleton = new ThreadLocal<>();
 
     static {
         Scope rootScope = new RootScope();
         RootSingletonScope rootScopeSingleTone = new RootSingletonScope();
+
         rootScopeSingleTone.put("Scope.RootSingleton", rootScopeSingleTone);
         rootScope.put("Scope.RootScope", (args) -> rootScope);
         rootScope.put("IoC.Register", (args) -> new RegisterCommand(args));

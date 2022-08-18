@@ -45,6 +45,7 @@ class InterpretCommandTest {
     @BeforeAll
     public static void register() {
         Scope newScope = IoC.resolve("Scope.New", (Scope) IoC.resolve("Scope.RootScope"));
+        ((Command) IoC.resolve("Scope.Current", newScope)).execute();
 
         ((Command) IoC.resolve("IoC.Register", "Adapter",
                 AdapterGenerator.class)).execute();
