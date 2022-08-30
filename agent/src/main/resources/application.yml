@@ -1,0 +1,8 @@
+app:
+  main-exchange: main-exchange
+  routing-key: q.queue-game
+server:
+  port: 8081
+spring:
+  rabbitmq:
+    addresses: "localhost"
