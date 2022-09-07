@@ -49,4 +49,8 @@
             <version>2.13.3</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>game</finalName>
+    </build>
 </project>
