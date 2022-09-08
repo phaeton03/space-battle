@@ -9,6 +9,7 @@ public class DefaultThreadHandlerStrategy implements HandlerStrategy {
     private final Queue<Command> queue;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
+
     public DefaultThreadHandlerStrategy(Queue<Command> queue, HandlerExceptionResolver handlerExceptionResolver) {
         this.queue = queue;
         this.handlerExceptionResolver = handlerExceptionResolver;

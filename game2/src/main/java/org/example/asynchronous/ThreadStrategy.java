@@ -1,7 +1,11 @@
 package org.example.asynchronous;
 
+import lombok.RequiredArgsConstructor;
+import org.example.infrastructure.ioc.IoC;
 import org.example.space_interface.Command;
 import org.example.space_interface.HandlerExceptionResolver;
+import org.example.state.CommandState;
+import org.example.strategy.DefaultThreadHandlerStrategy;
 import org.example.strategy.HandlerStrategy;
 
 import java.util.Queue;
@@ -11,6 +15,8 @@ public class ThreadStrategy implements Runnable {
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     private HandlerStrategy handlerStrategy;
+
+    private CommandState commandState = new DefaultCommandState();
 
     private Boolean stop = false;
 
@@ -24,8 +30,8 @@ public class ThreadStrategy implements Runnable {
 
     @Override
     public void run() {
-        while (!stop) {
-            handlerStrategy.handle();
+        while (!stop || commandState != null) {
+            commandState.run();
         }
 
         stop = false;
@@ -35,6 +41,7 @@ public class ThreadStrategy implements Runnable {
         @Override
         public void execute() {
             stop = true;
+            commandState = null;
         }
     }
 
@@ -54,6 +61,42 @@ public class ThreadStrategy implements Runnable {
                 }
                 stop = true;
             };
+        }
+    }
+
+    public class RunCommand implements Command {
+        @Override
+        public void execute() {
+            commandState = new DefaultCommandState();
+        }
+    }
+
+    public class MoveToCommand implements Command {
+        @Override
+        public void execute() {
+            commandState = new ReserveQueueCommandState();
+        }
+    }
+
+    class DefaultCommandState implements CommandState {
+
+        @Override
+        public void run() {
+            handlerStrategy = IoC.resolve("DefaultThreadHandlerStrategy");
+
+            handlerStrategy.handle();
+        }
+    }
+
+    class ReserveQueueCommandState implements CommandState {
+
+        @Override
+        public void run() {
+            Queue<Command> reserveCommandQueue = IoC.resolve("ReserveCommandQueue");
+
+            reserveCommandQueue.addAll(queue);
+            queue.clear();
+            stop = true;
         }
     }
 }
