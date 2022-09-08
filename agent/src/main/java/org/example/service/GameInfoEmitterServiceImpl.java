@@ -40,7 +40,7 @@ public class GameInfoEmitterServiceImpl implements GameInfoEmitterService {
 
     private final AmqpTemplate rabbitTemplate;
 
-    @Scheduled(initialDelay = 3000, fixedRate = 10000)
+//    @Scheduled(initialDelay = 3000, fixedRate = 1000000000)
     public void emitGameCommands() {
         System.out.println("emit");
         if (!gameDtoQueue.isEmpty()) {

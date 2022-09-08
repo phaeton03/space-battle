@@ -38,14 +38,14 @@ import static org.example.constants.AuthConstants.*;
 @Slf4j
 @Component
 public class AuthFilter extends OncePerRequestFilter {
-    @Value("${token.public}")
-    private String publicKey;
 
     private final JwtUtils jwtUtils;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         var header = request.getHeader(AUTH);
+        log.info("Dont filter with header = {}", header);
+
         if (header == null)
             return true;
 
@@ -56,15 +56,17 @@ public class AuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        log.info("AuthentificationFilter: {}", request.getHeader(AUTH));
 
         String accessToken = request.getHeader(AUTH).substring(BEARER.length());
-        String refreshToken = request.getHeader(REFRESH).substring(BEARER.length());
+        String refreshToken = request.getHeader(REFRESH);
 
         ClaimsDto claimsDto;
 
         try {
             claimsDto = jwtUtils.validate(accessToken, refreshToken);
         } catch (Exception e) {
+            log.info("Exception {}", e.getMessage());
             setErrorResponse(HttpStatus.FORBIDDEN, response, e);
             return;
         }
@@ -72,8 +74,9 @@ public class AuthFilter extends OncePerRequestFilter {
         @SuppressWarnings("unchecked")
         List<String> roles = claimsDto.getClaims().get("roles", List.class);
 
+        log.info("AuthFilter: Roles {}", roles);
         List<SimpleGrantedAuthority> authorities = roles.stream()
-                .map(SimpleGrantedAuthority::new)
+                .map(r -> new SimpleGrantedAuthority(ROLE + r.toUpperCase()))
                 .collect(Collectors.toList());
 
         SecurityContextHolder
@@ -82,11 +85,13 @@ public class AuthFilter extends OncePerRequestFilter {
                         claimsDto.getToken(),
                         authorities));
 
+        log.info("AuthFilter set Authentification");
+
         filterChain.doFilter(request, response);
     }
 
     @SneakyThrows
-    private void setErrorResponse(HttpStatus status, HttpServletResponse response, Throwable ex){
+    private void setErrorResponse(HttpStatus status, HttpServletResponse response, Throwable ex) {
         response.setStatus(status.value());
         response.setContentType("application/json");
         log.error("Auth error", ex);

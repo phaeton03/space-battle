@@ -4,5 +4,7 @@ public class AuthConstants {
     public final static String
             AUTH = "Authorization",
             BEARER = "Bearer ",
-            REFRESH = "RefreshToken";
+            REFRESH = "Refresh",
+
+            ROLE = "ROLE_";
 }

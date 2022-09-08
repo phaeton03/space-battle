@@ -8,6 +8,7 @@ import org.example.domain.User;
 import org.example.exception.AuthException;
 import org.example.handler.RequestHandler;
 import org.example.service.UserService;
+import org.example.utils.KeysParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -47,7 +48,7 @@ public class JwtTokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
                 .setIssuer("SPACE-BATTLE/OTUS")
-                .signWith(SignatureAlgorithm.RS256, privateKey.trim())
+                .signWith(KeysParser.getPrivateKeyFromString(privateKey))
                 .compact();
 
         String refreshToken = createRefreshToken(userName);
@@ -74,21 +75,28 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, privateKey.trim())
+                .signWith(KeysParser.getPrivateKeyFromString(privateKey))
                 .compact();
     }
 
     public void validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(privateKey.trim()).parseClaimsJws(token);
+        JwtParser jwtParser = Jwts.parserBuilder()
+                .setSigningKey(KeysParser.getPrivateKeyFromString(privateKey))
+                .build();
 
+        try {
+            jwtParser.parseClaimsJws(token);
         } catch (JwtException | IllegalArgumentException e) {
             throw new AuthException("JWT token is expired or invalid");
         }
     }
 
     public String getUserNameFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(privateKey.trim()).parseClaimsJws(token).getBody();
+        JwtParser jwtParser = Jwts.parserBuilder()
+                .setSigningKey(KeysParser.getPrivateKeyFromString(privateKey))
+                .build();
+
+        Claims claims = jwtParser.parseClaimsJws(token).getBody();
 
         return claims.getSubject();
     }

@@ -5,6 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.client.AuthProviderClient;
 import org.example.utils.dto.ClaimsDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtUtils {
     @Value("${token.public}")
     private String publicKey;
@@ -31,7 +33,7 @@ public class JwtUtils {
 
     public ClaimsDto validate(String accessToken, String refreshToken) {
         JwtParser jwtParser = Jwts.parserBuilder()
-                .setSigningKey(publicKey)
+                .setSigningKey(KeysParser.getPublicKeyFromString(publicKey))
                 .build();
 
         Claims claims;
@@ -41,6 +43,8 @@ public class JwtUtils {
             claims = jwtParser.parseClaimsJws(accessToken).getBody();
             claimsDto = new ClaimsDto(claims, accessToken);
         } catch (ExpiredJwtException expiredJwtException) {
+            log.info("Token is Expired");
+
             String newAccessToken = authProviderClient.getAccessTokenByRefreshToken(refreshToken).getAccessToken();
             claims = jwtParser.parseClaimsJws(newAccessToken).getBody();
             claimsDto = new ClaimsDto(claims, newAccessToken);

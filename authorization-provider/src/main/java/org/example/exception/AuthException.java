@@ -1,8 +1,7 @@
 package org.example.exception;
 
-import org.springframework.security.core.AuthenticationException;
 
-public class AuthException extends AuthenticationException {
+public class AuthException extends RuntimeException {
     public AuthException(String msg, Throwable cause) {
         super(msg, cause);
     }
