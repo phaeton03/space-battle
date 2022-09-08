@@ -26,7 +26,7 @@ public class AuthController {
     }
 
     @GetMapping("/refresh")
-    public TokenResponse auth(String refreshToken) {
+    public TokenResponse auth(@RequestParam String refreshToken) {
 
         return jwtTokenProvider.generateTokenByRefreshToken(refreshToken);
     }

@@ -23,14 +23,6 @@ public class JwtUtils {
 
     private final AuthProviderClient authProviderClient;
 
-    public Claims validate(String token) {
-        JwtParser jwtParser = Jwts.parserBuilder()
-                .setSigningKey(publicKey)
-                .build();
-
-        return jwtParser.parseClaimsJws(token).getBody();
-    }
-
     public ClaimsDto validate(String accessToken, String refreshToken) {
         JwtParser jwtParser = Jwts.parserBuilder()
                 .setSigningKey(KeysParser.getPublicKeyFromString(publicKey))
@@ -46,6 +38,7 @@ public class JwtUtils {
             log.info("Token is Expired");
 
             String newAccessToken = authProviderClient.getAccessTokenByRefreshToken(refreshToken).getAccessToken();
+            log.info("Token was refreshed");
             claims = jwtParser.parseClaimsJws(newAccessToken).getBody();
             claimsDto = new ClaimsDto(claims, newAccessToken);
         }
