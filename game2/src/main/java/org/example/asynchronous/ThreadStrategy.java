@@ -30,44 +30,35 @@ public class ThreadStrategy implements Runnable {
 
     @Override
     public void run() {
-        while (!stop || commandState != null) {
+        while (!stop) {
             commandState.run();
         }
 
         stop = false;
     }
 
+    public void resetToDefaultState() {
+        commandState = new DefaultCommandState();
+    }
+
     public class HardStopCommand implements Command {
         @Override
         public void execute() {
             stop = true;
-            commandState = null;
         }
     }
 
     public class SoftStopCommand implements Command {
         @Override
         public void execute() {
-
-            handlerStrategy = () -> {
-                while (!queue.isEmpty()) {
-                    Command command = queue.poll();
-
-                    try {
-                        command.execute();
-                    } catch (RuntimeException e) {
-                        handlerExceptionResolver.handle(command, e);
-                    }
-                }
-                stop = true;
-            };
+            commandState = new SoftCommandState();
         }
     }
 
     public class RunCommand implements Command {
         @Override
         public void execute() {
-            commandState = new DefaultCommandState();
+            resetToDefaultState();
         }
     }
 
@@ -79,10 +70,29 @@ public class ThreadStrategy implements Runnable {
     }
 
     class DefaultCommandState implements CommandState {
-
         @Override
         public void run() {
-            handlerStrategy = IoC.resolve("DefaultThreadHandlerStrategy");
+            handlerStrategy = IoC.resolve("HandlerStrategy");
+
+            handlerStrategy.handle();
+        }
+    }
+
+    class SoftCommandState implements CommandState {
+        @Override
+        public void run() {
+           handlerStrategy = () -> {
+                while (!queue.isEmpty()) {
+                    Command command = queue.poll();
+
+                    try {
+                        command.execute();
+                    } catch (RuntimeException e) {
+                        handlerExceptionResolver.handle(command, e);
+                    }
+                }
+                stop = true;
+            };
 
             handlerStrategy.handle();
         }

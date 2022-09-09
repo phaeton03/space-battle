@@ -1,0 +1,8 @@
+app:
+  queue-game: q.queue-game
+  main-exchange: main-exchange
+spring:
+  application:
+    name: client
+  rabbitmq:
+    addresses: "localhost"

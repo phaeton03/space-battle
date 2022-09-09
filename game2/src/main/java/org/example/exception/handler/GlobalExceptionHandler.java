@@ -6,8 +6,11 @@ import org.example.config.ExceptionHandlerConfig;
 import org.example.space_interface.Command;
 import org.example.space_interface.HandlerExceptionResolver;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
+import java.util.stream.Stream;
 
 
 public class GlobalExceptionHandler implements HandlerExceptionResolver {
@@ -15,6 +18,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 
     private final Map<Class<? extends Exception>, Class<? extends Command>> exceptionCommandHandlerMap
             = ExceptionHandlerConfig.exceptionCommandHandlerMap;
+
 
     private final Map<Class<? extends Command>, Class<? extends Command>> commandHandlerMap
             = ExceptionHandlerConfig.commandHandlerMap;
@@ -27,8 +31,16 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
         Class<? extends Command> commandExceptionDefinition =
                 exceptionCommandHandlerMap.getOrDefault(e, DefaultExceptionCommand.class);
 
-        Class<? extends Command> commandDefinition =
-                commandHandlerMap.getOrDefault(command, commandExceptionDefinition);
+        Class<? extends Command> commandDefinition;
+
+        /**
+         * Коллекция commandHanlderMap не принимает null в качестве ключа.
+         * **/
+        if (command != null) {
+            commandDefinition = commandHandlerMap.getOrDefault(command, commandExceptionDefinition);
+        } else {
+            commandDefinition = commandExceptionDefinition;
+        }
 
         Command commandException = commandDefinition.equals(DefaultExceptionCommand.class)
                 ? getDefaultExceptionCommand(command, e)
