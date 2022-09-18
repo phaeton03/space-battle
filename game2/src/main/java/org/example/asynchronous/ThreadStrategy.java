@@ -1,7 +1,11 @@
 package org.example.asynchronous;
 
+import lombok.RequiredArgsConstructor;
+import org.example.infrastructure.ioc.IoC;
 import org.example.space_interface.Command;
 import org.example.space_interface.HandlerExceptionResolver;
+import org.example.state.CommandState;
+import org.example.strategy.DefaultThreadHandlerStrategy;
 import org.example.strategy.HandlerStrategy;
 
 import java.util.Queue;
@@ -11,6 +15,8 @@ public class ThreadStrategy implements Runnable {
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     private HandlerStrategy handlerStrategy;
+
+    private CommandState commandState = new DefaultCommandState();
 
     private Boolean stop = false;
 
@@ -25,10 +31,14 @@ public class ThreadStrategy implements Runnable {
     @Override
     public void run() {
         while (!stop) {
-            handlerStrategy.handle();
+            commandState.run();
         }
 
         stop = false;
+    }
+
+    public void resetToDefaultState() {
+        commandState = new DefaultCommandState();
     }
 
     public class HardStopCommand implements Command {
@@ -41,8 +51,37 @@ public class ThreadStrategy implements Runnable {
     public class SoftStopCommand implements Command {
         @Override
         public void execute() {
+            commandState = new SoftCommandState();
+        }
+    }
 
-            handlerStrategy = () -> {
+    public class RunCommand implements Command {
+        @Override
+        public void execute() {
+            resetToDefaultState();
+        }
+    }
+
+    public class MoveToCommand implements Command {
+        @Override
+        public void execute() {
+            commandState = new ReserveQueueCommandState();
+        }
+    }
+
+    class DefaultCommandState implements CommandState {
+        @Override
+        public void run() {
+            handlerStrategy = IoC.resolve("HandlerStrategy");
+
+            handlerStrategy.handle();
+        }
+    }
+
+    class SoftCommandState implements CommandState {
+        @Override
+        public void run() {
+           handlerStrategy = () -> {
                 while (!queue.isEmpty()) {
                     Command command = queue.poll();
 
@@ -54,6 +93,20 @@ public class ThreadStrategy implements Runnable {
                 }
                 stop = true;
             };
+
+            handlerStrategy.handle();
+        }
+    }
+
+    class ReserveQueueCommandState implements CommandState {
+
+        @Override
+        public void run() {
+            Queue<Command> reserveCommandQueue = IoC.resolve("ReserveCommandQueue");
+
+            reserveCommandQueue.addAll(queue);
+            queue.clear();
+            stop = true;
         }
     }
 }
