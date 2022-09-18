@@ -17,5 +17,7 @@
     <modules>
         <module>agent</module>
         <module>game2</module>
+        <module>authorization-provider</module>
+        <module>client</module>
     </modules>
 </project>

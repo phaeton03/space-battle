@@ -3,6 +3,6 @@ app:
   main-exchange: main-exchange
 spring:
   application:
-    name: game
+    name: client
   rabbitmq:
     addresses: "localhost"

@@ -4,5 +4,18 @@ app:
 server:
   port: 8081
 spring:
+  application:
+    name: agent
   rabbitmq:
     addresses: "localhost"
+token:
+  public: |
+    -----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl99RqfuNTjHsU1T1uXCL
+    mCthsYpTlAj5Yo7zzqqr6gihCkejr2sIbe0MkWyNo2SJKOhf1D9YZdntiinoNjvb
+    2dQjIB2ahVMVl58wMqi8JluH6yDL5mINUS/YYn6b7xcniFyu1v2UaZDdMh0xZGZ6
+    fC4cnLuthpKcXYyLQb2z/DeaGfDnaK0Bx6MFGljahL6Y87PoOMVBee3NXCHcj619
+    wtlyxJoiWnguF11PZ5+g5QknqMNJ7ZjneMJA17Mheq9AuV3AtESJHZXtGofBxDbR
+    419SlBqIhLrxOPo+rkrgvoNkV6rOtjvKNixvYuznXIa/BafFlObvGrsKvCbxwWLD
+    MwIDAQAB
+    -----END PUBLIC KEY-----

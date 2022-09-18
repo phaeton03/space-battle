@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: auth-provider
+server:
+  port: 8082
+token:
+  expired: 36000
+  private: |
+    -----BEGIN PRIVATE KEY-----
+    MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCX31Gp+41OMexT
+    VPW5cIuYK2GxilOUCPlijvPOqqvqCKEKR6Ovawht7QyRbI2jZIko6F/UP1hl2e2K
+    Keg2O9vZ1CMgHZqFUxWXnzAyqLwmW4frIMvmYg1RL9hifpvvFyeIXK7W/ZRpkN0y
+    HTFkZnp8Lhycu62GkpxdjItBvbP8N5oZ8OdorQHHowUaWNqEvpjzs+g4xUF57c1c
+    IdyPrX3C2XLEmiJaeC4XXU9nn6DlCSeow0ntmOd4wkDXsyF6r0C5XcC0RIkdle0a
+    h8HENtHjX1KUGoiEuvE4+j6uSuC+g2RXqs62O8o2LG9i7Odchr8Fp8WU5u8auwq8
+    JvHBYsMzAgMBAAECggEAA7HswDh9EyJ2z/44rkbVNqITkei+KNNhEetNdkFDxoFo
+    PaJJkrqFbXs/e4hLF+cZyTOCJV1XLr8zHtHvMuaY7j9RjXX67PR9CX/XgdwGG97N
+    O0TEgTnwfgGuf5L6A0KqdRBgNp3bzwe1wgLg0UMHBt9uVcfhLG2DvWjueG5/owrD
+    qEtvq8wYyAZ6CWe680t0svz2odOIcGvu8nEoaj1xqHl0VWLFFr2WTLMTt87yhwLn
+    ByYUl1OBKhKKSHfMuc2zyCrYKvXXbfWV0WSed6GXIYbEb9tnGCcWOJVLa4WWefyS
+    zhpRNLj6V10lkLd6MqJkfIfxZrIidUPyZH+lPGQBYQKBgQC33O1bAQMhpSAplluI
+    9Qyu9sPagW1mhCIvvhZ9XMfiA0Q3wZW4ruiHwh0cbfRqSRU8I4cnQOIVaPcAfbBX
+    S0PZU0dGrTBbeFqQQETFopEbzSwsN+PWRuZcpYuBatnnloRnaIjNc1/LS7QQDyWs
+    WgAMw7jeuQPz7ptpG67ruWdykwKBgQDTdUWzisgL8iTDnMB+HEXxn4z5R5KTHtY7
+    s2GH6kUSpnBBDuGoSKIGx1e7tB+PPY8/Zo1WEPakNjaagAxkTGkkeDW7AJMxSjJT
+    yO6jJUAev3AVzatYUtVnReIs9O4frT8AW5Dlj0CmzF5f1LHPgKALS7z7JX5zcRiK
+    rToDS8aw4QKBgCU2QZO5kLiuguPn2n7NmdOPffQrXcjx1Tl0b3jP3mSP5K6kL3lB
+    bS6MyveGCYG5aOLTDfeT2i4bIGKpDZedVA4YHMThKHha03l+iGy3ikbmL5qDdUlY
+    8CawGpwG1DNa81E6hvWN9EVg/QCDEEzhqkDrG+934qTsFeggAjcTPyyhAoGBAI/G
+    XO4Gnp4Ath6KphcZAjWXVjLoBzEg9mkBPn87OlvD7u9NPwE84W3afDyT7CFoqc1h
+    3Rd30Ts14UqLZeGMUrEJSv8rFOmemTl+lUM4QLCnWX55qNcU+ySMz4vhvUasdPm5
+    SHvNOxguPLzL0VpVCnyjsorQo3m6nAUuYxN6ok4BAoGBAI2ZCpLlb/XhI6aWUCEA
+    YkFM4Vz68TeJZ/H/NnyDlc4zetYYRb1mUFvGkfDh4EyqDcDtat6znzn4ynHrhrUz
+    aXP/QrfKTBA89eTmy5CLp6AT+b+t7CcTBFW/FwfUeb5u9GdZf6evXrShSaQyqAPY
+    BG5lRXxJcrr6baRdu1DiPXLR
+    -----END PRIVATE KEY-----
+   
